@@ -6,7 +6,7 @@ import { copyFixture, listFiles, makeTempDir, removeTempDir } from './helpers.js
 
 describe('CLI', () => {
   it('runs audit without writing to the target repo', async () => {
-    const tempDir = await makeTempDir('repohandoff-cli-audit')
+    const tempDir = await makeTempDir('handoffkit-cli-audit')
     try {
       const repo = await copyFixture('node-good', tempDir)
       const before = await listFiles(repo)
@@ -27,7 +27,7 @@ describe('CLI', () => {
   })
 
   it('generates a pack using --out', async () => {
-    const tempDir = await makeTempDir('repohandoff-cli-generate')
+    const tempDir = await makeTempDir('handoffkit-cli-generate')
     try {
       const repo = await copyFixture('python-good', tempDir)
       const outDir = join(tempDir, 'pack')
@@ -46,7 +46,7 @@ describe('CLI', () => {
   })
 
   it('ci writes Markdown and JSON artifacts', async () => {
-    const tempDir = await makeTempDir('repohandoff-cli-ci')
+    const tempDir = await makeTempDir('handoffkit-cli-ci')
     try {
       const repo = await copyFixture('node-good', tempDir)
       const outDir = join(tempDir, 'artifacts')
@@ -58,8 +58,8 @@ describe('CLI', () => {
       })
 
       expect(exitCode).toBe(0)
-      await expect(readFile(join(outDir, 'repohandoff-report.md'), 'utf8')).resolves.toContain('# RepoHandoff Report')
-      await expect(readFile(join(outDir, 'repohandoff-report.json'), 'utf8')).resolves.toContain('overallScore')
+      await expect(readFile(join(outDir, 'handoffkit-report.md'), 'utf8')).resolves.toContain('# HandoffKit Report')
+      await expect(readFile(join(outDir, 'handoffkit-report.json'), 'utf8')).resolves.toContain('overallScore')
     } finally {
       await removeTempDir(tempDir)
     }

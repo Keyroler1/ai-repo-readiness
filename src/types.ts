@@ -52,7 +52,7 @@ export interface ScoreCategory {
 }
 
 export interface AuditReport {
-  tool: 'repohandoff'
+  tool: 'handoffkit'
   version: string
   generatedAt: string
   repo: {

@@ -6,7 +6,7 @@ import { join } from 'node:path'
 
 describe('MCP scanner', () => {
   it('flags direct secrets, shell execution, and vague tool descriptions', async () => {
-    const tempDir = await makeTempDir('repohandoff-mcp')
+    const tempDir = await makeTempDir('handoffkit-mcp')
     try {
       const repo = await copyFixture('mcp-risky', tempDir)
       const result = await scanMcpTarget(join(repo, 'mcp-server.json'))
@@ -35,7 +35,7 @@ describe('MCP scanner', () => {
   })
 
   it('scans non-JSON MCP config text for shell startup references', async () => {
-    const tempDir = await makeTempDir('repohandoff-mcp-text')
+    const tempDir = await makeTempDir('handoffkit-mcp-text')
     try {
       const target = join(tempDir, 'mcp-config.yaml')
       await writeFile(target, 'command: powershell\nargs: ["node", "server.js"]\n', 'utf8')

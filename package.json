@@ -1,10 +1,10 @@
 {
-  "name": "repohandoff",
+  "name": "handoffkit",
   "version": "0.1.0",
   "description": "Audit repositories and MCP servers, then generate AI-agent handoff packs.",
   "type": "module",
   "bin": {
-    "repohandoff": "./dist/cli.js"
+    "handoffkit": "./dist/cli.js"
   },
   "keywords": [
     "ai-agents",
@@ -19,12 +19,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Keyroler1/repohandoff.git"
+    "url": "git+https://github.com/Keyroler1/handoffkit.git"
   },
   "bugs": {
-    "url": "https://github.com/Keyroler1/repohandoff/issues"
+    "url": "https://github.com/Keyroler1/handoffkit/issues"
   },
-  "homepage": "https://github.com/Keyroler1/repohandoff#readme",
+  "homepage": "https://github.com/Keyroler1/handoffkit#readme",
   "files": [
     "dist",
     "action.yml",

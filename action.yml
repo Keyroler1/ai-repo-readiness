@@ -1,6 +1,6 @@
-name: RepoHandoff
+name: HandoffKit
 description: Audit repos, docs, and MCP servers for AI-agent readiness.
-author: RepoHandoff
+author: HandoffKit
 
 inputs:
   path:
@@ -8,9 +8,9 @@ inputs:
     required: false
     default: .
   out:
-    description: Directory for RepoHandoff report artifacts.
+    description: Directory for HandoffKit report artifacts.
     required: false
-    default: repohandoff-artifacts
+    default: handoffkit-artifacts
   comment:
     description: Post a PR comment when GitHub token and PR context are available.
     required: false
@@ -27,17 +27,17 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Install RepoHandoff action dependencies
+    - name: Install HandoffKit action dependencies
       shell: bash
       working-directory: ${{ github.action_path }}
       run: npm ci
 
-    - name: Build RepoHandoff action
+    - name: Build HandoffKit action
       shell: bash
       working-directory: ${{ github.action_path }}
       run: npm run build
 
-    - name: Run RepoHandoff
+    - name: Run HandoffKit
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
@@ -52,8 +52,8 @@ runs:
         fi
         node "${{ github.action_path }}/dist/cli.js" "${args[@]}"
 
-    - name: Upload RepoHandoff artifacts
+    - name: Upload HandoffKit artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: repohandoff-report
+        name: handoffkit-report
         path: ${{ inputs.out }}

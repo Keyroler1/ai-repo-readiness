@@ -70,14 +70,14 @@ async function runAudit(args: string[], io: CliIo): Promise<number> {
 async function runGenerate(args: string[], io: CliIo): Promise<number> {
   const options = parseOptions(args)
   const repoPath = resolve(options.positionals[0] ?? '.')
-  const outDir = resolve(String(options.flags.get('out') ?? 'repohandoff-pack'))
+  const outDir = resolve(String(options.flags.get('out') ?? 'handoffkit-pack'))
   const signals = await scanRepository(repoPath)
   const mcpResults = await scanDetectedMcpTargets(repoPath, signals)
   const report = calculateScorecard(signals, mcpResults)
   const llmSummary = options.flags.has('llm') ? await synthesizeAgentReadinessNotes(report, io.env) : undefined
   const result = await generateAgentPack(repoPath, outDir, { llmSummary })
 
-  io.stdout(`Generated RepoHandoff pack at ${outDir}\n`)
+  io.stdout(`Generated HandoffKit pack at ${outDir}\n`)
   io.stdout(`Overall score: ${result.report.overallScore}/100\n`)
   return 0
 }
@@ -97,7 +97,7 @@ async function runCheckMcp(args: string[], io: CliIo): Promise<number> {
 async function runCi(args: string[], io: CliIo): Promise<number> {
   const options = parseOptions(args)
   const repoPath = resolve(options.positionals[0] ?? '.')
-  const outDir = resolve(String(options.flags.get('out') ?? 'repohandoff-artifacts'))
+  const outDir = resolve(String(options.flags.get('out') ?? 'handoffkit-artifacts'))
   const signals = await scanRepository(repoPath)
   const mcpResults = await scanDetectedMcpTargets(repoPath, signals)
   const report = calculateScorecard(signals, mcpResults)
@@ -117,14 +117,14 @@ async function runCi(args: string[], io: CliIo): Promise<number> {
     await maybeCommentOnPullRequest(report, markdown, io)
   }
 
-  io.stdout(`Wrote RepoHandoff CI artifacts to ${outDir}\n`)
+  io.stdout(`Wrote HandoffKit CI artifacts to ${outDir}\n`)
   return report.overallScore >= 50 ? 0 : 2
 }
 
 async function maybeCommentOnPullRequest(report: AuditReport, markdown: string, io: CliIo): Promise<void> {
   const token = io.env.GITHUB_TOKEN
   const repository = io.env.GITHUB_REPOSITORY
-  const pullRequestNumber = io.env.GITHUB_REF_NAME?.match(/^(\d+)\/merge$/)?.[1] ?? io.env.REPOHANDOFF_PR_NUMBER
+  const pullRequestNumber = io.env.GITHUB_REF_NAME?.match(/^(\d+)\/merge$/)?.[1] ?? io.env.HANDOFFKIT_PR_NUMBER
 
   if (!token || !repository || !pullRequestNumber) {
     io.stderr('Skipping PR comment because GITHUB_TOKEN, GITHUB_REPOSITORY, or PR number is missing.\n')
@@ -132,7 +132,7 @@ async function maybeCommentOnPullRequest(report: AuditReport, markdown: string, 
   }
 
   const body = [
-    `## RepoHandoff score: ${report.overallScore}/100`,
+    `## HandoffKit score: ${report.overallScore}/100`,
     '',
     markdown.length > 50_000 ? markdown.slice(0, 50_000) : markdown
   ].join('\n')
@@ -183,18 +183,18 @@ function parseOptions(args: string[]): ParsedOptions {
 }
 
 function renderHelp(): string {
-  return `RepoHandoff
+  return `HandoffKit
 
 Usage:
-  repohandoff audit <path> [--json]
-  repohandoff generate <path> --out repohandoff-pack [--llm]
-  repohandoff check-mcp <command-or-config> [--json]
-  repohandoff ci [path] [--out repohandoff-artifacts] [--comment] [--llm]
+  handoffkit audit <path> [--json]
+  handoffkit generate <path> --out handoffkit-pack [--llm]
+  handoffkit check-mcp <command-or-config> [--json]
+  handoffkit ci [path] [--out handoffkit-artifacts] [--comment] [--llm]
 
 Notes:
   audit is read-only and prints to stdout.
   generate writes only to the selected output folder.
-  ci writes repohandoff-report.md and repohandoff-report.json.
+  ci writes handoffkit-report.md and handoffkit-report.json.
   --llm uses OPENAI_API_KEY when present; it is never required.
 `
 }

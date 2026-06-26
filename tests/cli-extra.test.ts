@@ -26,12 +26,12 @@ describe('CLI secondary paths', () => {
       env: {}
     })).resolves.toBe(1)
 
-    expect(stdout.join('')).toContain('RepoHandoff')
+    expect(stdout.join('')).toContain('HandoffKit')
     expect(stderr.join('')).toContain('Unknown command')
   })
 
   it('prints markdown audit output and returns non-zero for poor scores', async () => {
-    const tempDir = await makeTempDir('repohandoff-cli-markdown')
+    const tempDir = await makeTempDir('handoffkit-cli-markdown')
     try {
       const goodRepo = await copyFixture('node-good', tempDir)
       const poorRepo = await copyFixture('poor-repo', tempDir)
@@ -49,7 +49,7 @@ describe('CLI secondary paths', () => {
         env: {}
       })).resolves.toBe(2)
 
-      expect(stdout.join('')).toContain('# RepoHandoff Report')
+      expect(stdout.join('')).toContain('# HandoffKit Report')
     } finally {
       await removeTempDir(tempDir)
     }
@@ -76,7 +76,7 @@ describe('CLI secondary paths', () => {
   })
 
   it('handles optional CI commenting when GitHub context is missing', async () => {
-    const tempDir = await makeTempDir('repohandoff-cli-comment')
+    const tempDir = await makeTempDir('handoffkit-cli-comment')
     try {
       const repo = await copyFixture('node-good', tempDir)
       const errors: string[] = []
@@ -95,7 +95,7 @@ describe('CLI secondary paths', () => {
   })
 
   it('handles inline out flags, step summaries, LLM summaries, and GitHub comment failures', async () => {
-    const tempDir = await makeTempDir('repohandoff-cli-rich')
+    const tempDir = await makeTempDir('handoffkit-cli-rich')
     try {
       const repo = await copyFixture('node-good', tempDir)
       const summaryPath = join(tempDir, 'summary.md')
@@ -123,11 +123,11 @@ describe('CLI secondary paths', () => {
           GITHUB_STEP_SUMMARY: summaryPath,
           GITHUB_TOKEN: 'token',
           GITHUB_REPOSITORY: 'owner/repo',
-          REPOHANDOFF_PR_NUMBER: '1'
+          HANDOFFKIT_PR_NUMBER: '1'
         }
       })).resolves.toBe(0)
 
-      await expect(readFile(summaryPath, 'utf8')).resolves.toContain('# RepoHandoff Report')
+      await expect(readFile(summaryPath, 'utf8')).resolves.toContain('# HandoffKit Report')
       expect(errors.join('')).toContain('HTTP 500')
     } finally {
       await removeTempDir(tempDir)

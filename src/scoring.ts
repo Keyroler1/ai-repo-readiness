@@ -35,7 +35,7 @@ export function calculateScorecard(signals: RepoSignals, mcpResults: McpScanResu
   const { rootPath: _rootPath, secretFindings: _secretFindings, ...safeSignals } = signals
 
   return {
-    tool: 'repohandoff',
+    tool: 'handoffkit',
     version: VERSION,
     generatedAt: new Date().toISOString(),
     repo: {
@@ -51,8 +51,8 @@ export function calculateScorecard(signals: RepoSignals, mcpResults: McpScanResu
 
 export function reportOutputPaths(outDir: string): { markdown: string; json: string } {
   return {
-    markdown: join(outDir, 'repohandoff-report.md'),
-    json: join(outDir, 'repohandoff-report.json')
+    markdown: join(outDir, 'handoffkit-report.md'),
+    json: join(outDir, 'handoffkit-report.json')
   }
 }
 
